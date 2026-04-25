@@ -1,65 +1,131 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [status, setStatus] = useState(null); // null, "success", "error"
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleChange(event) {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  }
+  
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setIsLoading(true);
+    setStatus(null);
+
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      setStatus("success");
+      setFormData({ name: "", email: "", message: "" });
+    } else {
+      setStatus("error");
+    }
+    setIsLoading(false);
+  }
+
+  let message = null;
+  if (status === "success") {
+    message = <p className="text-green-600 text-center mb-4">Message sent successfully!</p>;
+  } else if (status === "error") {
+    message = <p className="text-red-600 text-center mb-4">Failed to send message. Please try again.</p>;
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <main className="min-h-screen bg-gradient-to-br from-emerald-600 to-green-300 flex items-center justify-center p-6">
+      <div className="bg-white rounded-2xl shadow-2xl p-10 w-full max-w-lg">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+          src="/companyLogo.png"
+          alt="Company Logo"
+          width={200}
+          height={200}
+          className="mx-auto mb-6 rounded-xl border-1 border-green-700 shadow-lg"
+          loading = "eager"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        <h1 className="text-3xl font-bold text-slate-800 mb-2 text-center">
+          Connect Us 
+        </h1>
+        <p className="text-slate-600 mb-8 text-center">
+          Fill in your details and we will get back to you as soon as possible
+        </p>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+             Full Name
+            </label>
+            <input
+              type="text"
+              className="w-full border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder="Itamar Hadad"
+              name = "name"
+              value = {formData.name}
+              onChange = {handleChange}
+              required
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+             Email Address
+            </label>
+            <input
+              type="email"
+              className="w-full border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+              placeholder="itamar.hadad@example.com"
+              name = "email"
+              value = {formData.email}
+              onChange = {handleChange}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+             Message
+            </label>
+            <textarea
+              className="w-full border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+              rows={4}
+              placeholder="Enter your message here..."
+              name = "message"
+              value = {formData.message}
+              onChange = {handleChange}
+              required
+            />
+          </div>
+
+          {message}
+
+          <button            
+          type="submit"
+          className="bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-500 transition-colors duration-300"
+          disabled={isLoading}
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            {isLoading ? "Sending..." : "Send Message"}
+          </button>
+        </form>
+      </div>
+    </main>
   );
 }
+
