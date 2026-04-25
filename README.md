@@ -24,12 +24,12 @@ A responsive landing page built with Next.js and Tailwind CSS, featuring a conta
 
 ### 1. Clone the repository
 
-git clone https://github.com/Itamar-Hadad/Landing-Page
-cd Landing-Page
+bash`git clone https://github.com/Itamar-Hadad/Landing-Page
+cd Landing-Page`
 
 ### 2. Install dependencies
 
-npm install
+bash`npm install`
 
 ### 3. Set up environment variables
 
@@ -47,12 +47,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Project Structure
 
-app/
+bash`app/
 ├── page.js # Landing page UI
 └── api/
 └── contact/
-└── route.js # API route, saves to Airtable
+└── route.js # API route, saves to Airtable`
 
 ## Preview
 
-![Landing Page Preview](screenshots/preview.png)
+![Landing Page Preview](Screenshots/preview.png)
