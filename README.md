@@ -55,10 +55,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ```bash
 app/
-├── page.js # Landing page UI
+├── page.js          # Landing page UI
 └── api/
-└── contact/
-└── route.js # API route, saves to Airtable`
+    └── contact/
+        └── route.js # API route – saves to Airtable
 ```
 
 ## Preview
