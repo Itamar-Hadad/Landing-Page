@@ -58,7 +58,7 @@ app/
 ├── page.js          # Landing page UI
 └── api/
     └── contact/
-        └── route.js # API route – saves to Airtable
+        └── route.js # API route, saves to Airtable
 ```
 
 ## Preview
